@@ -36,18 +36,56 @@ def insert_operator(numbers, operator):
     print(min_result, max_result)
 
 
+def insert_operation_dfs(numbers, operator):
+    n = len(numbers)
+    add, sub, mul, div = tuple(operator)
+
+    max_val = -1e9
+    min_val = 1e9
+
+    def dfs(cur, val):
+        nonlocal max_val, min_val, add, sub, mul, div
+        if cur == n:
+            max_val = max(max_val, val)
+            min_val = min(min_val, val)
+        else:
+            if add > 0:
+                add -= 1
+                dfs(cur + 1, val + numbers[cur])
+                add += 1
+            if sub > 0:
+                sub -= 1
+                dfs(cur + 1, val - numbers[cur])
+                sub += 1
+            if mul > 0:
+                mul -= 1
+                dfs(cur + 1, val * numbers[cur])
+                mul += 1
+            if div > 0:
+                div -= 1
+                dfs(cur + 1, -(abs(val) // numbers[cur]) if val < 0 else val // numbers[cur])
+                div += 1
+
+    dfs(1, numbers[0])
+    print(max_val, min_val)
+
+
 insert_operator(
     numbers=[5, 6],
     operator=[0, 0, 1, 0]
 )
 
-
 insert_operator(
-    numbers=[3,4,5],
-    operator=[1,0,1,0]
+    numbers=[3, 4, 5],
+    operator=[1, 0, 1, 0]
 )
 
 insert_operator(
-    numbers=[1,2,3,4,5,6],
-    operator=[2,1,1,1]
+    numbers=[1, 2, 3, 4, 5, 6],
+    operator=[2, 1, 1, 1]
+)
+
+insert_operation_dfs(
+    numbers=[5, 6],
+    operator=[0, 0, 1, 0]
 )
